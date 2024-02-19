@@ -102,7 +102,7 @@ useEffect(() => {
           </Typography>
           )}
           <div style={{flexGrow:1}}>
-            <IconButton edge="start" color='inherit' aria-label='shopping-cart'>
+            <IconButton edge="start" color='inherit' aria-label='shopping-cart' as={Link} to="/Addc">
               <Badge badgeConent={cartCount} color='secondary'><ShoppingCartIcon/></Badge>
             </IconButton>
 

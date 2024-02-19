@@ -21,6 +21,8 @@ const Categoryedit = (props) => {
 
 
     var[inputs,setInputs]=useState(props.data)
+    var[selectedimage,setSelectedimage]=useState(null);
+
     const inputHandler=(event)=>
     {
 
@@ -28,17 +30,42 @@ const Categoryedit = (props) => {
         setInputs((inputs) => ({ ...inputs,[name]: value }))
         console.log(inputs)
     }
-    const addHandler=()=>{
-        if(props.method==='put'){
+    // const addHandler=()=>{
+    //     if(props.method==='put'){
 
-            axios.put("http://localhost:3005/edit/"+inputs._id,inputs)
-            .then(response=>{
-                console.log("post data"+response.data)
-                alert("Success")
-                window.location.reload(false)
-            })
-            .catch(err=>console.log(err))
-        }
+    //         axios.put("http://localhost:3005/edit/"+inputs._id,inputs)
+    //         .then(response=>{
+    //             console.log("post data"+response.data)
+    //             alert("Success")
+    //             window.location.reload(false)
+    //         })
+    //         .catch(err=>console.log(err))
+    //     }
+    // }
+    const savedata=()=>{
+      const formdata=new FormData();
+      formdata.append('name',inputs.name);
+      formdata.append('offer_price',inputs.offer_price);
+      formdata.append('MRP',inputs.MRP);
+      formdata.append('category',inputs.category);
+      formdata.append('image1',selectedimage)
+      fetch(`http://localhost:3005/edit/${inputs._id}`,
+      {
+          method:'post',
+          body:formdata,
+      })
+      .then((response)=>response.json())
+      .then((data)=>{
+          alert("record saved")
+      })
+      .catch((err)=>{
+          console.log("error")
+      })
+  }
+  const handleimage =(event)=>{
+    const file = event.target.files[0];
+    setSelectedimage(file)
+    inputs.image1=file;
     }
   return (
     <div>
@@ -68,7 +95,10 @@ const Categoryedit = (props) => {
         <MenuItem value="others">Others</MenuItem>
   </Select><br /><br />
 {/* </FormControl><br/><br/> */}
-  <Button variant="contained" onClick={addHandler} >Update</Button>
+<label>Upload file</label>
+        <input type="file" onChange={handleimage}></input>
+        <br /><br />
+  <Button variant="contained" onClick={savedata} >Update</Button>
   </div>
     
   )
